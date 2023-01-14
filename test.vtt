@@ -1,0 +1,447 @@
+WEBVTT
+
+00:00:02.100 --> 00:00:06.900
+Welcome back. Let's start our journey through the STL design with containers.
+
+00:00:07.800 --> 00:00:12.600
+Containers are collections of data in some data structure. Like in the vector example,
+
+00:00:12.600 --> 00:00:18.100
+earlier, containers are templated classes. The type of data they contain is a template
+
+00:00:18.100 --> 00:00:23.200
+parameter. This creates a limitation: all data in the container have to
+
+00:00:23.200 --> 00:00:29.100
+be of the same type, we don't have heterogeneous containers, like with Python lists
+
+00:00:29.200 --> 00:00:29.900
+for example.
+
+00:00:30.700 --> 00:00:36.000
+While limiting, this is also useful. As we saw earlier, knowing exactly
+
+00:00:36.000 --> 00:00:40.400
+what a vector contains makes it possible to store it and access it efficiently.
+
+00:00:40.900 --> 00:00:46.900
+So this is actually good. We can specialise the container for practically any type,
+
+00:00:47.100 --> 00:00:52.700
+built-in and user-defined. And That includes other containers too. We can have containers
+
+00:00:52.700 --> 00:00:53.700
+of containers.
+
+00:00:54.500 --> 00:00:58.900
+Each container class implements a different data structure, so each one has a
+
+00:00:58.900 --> 00:01:03.800
+different interface and trade-offs. But they also provide a small number
+
+00:01:03.800 --> 00:01:09.000
+of functions that are common across all containers. This common abstraction is
+
+00:01:09.000 --> 00:01:14.000
+what allows us to use them through generic code withour caring about the 
+
+00:01:14.000 --> 00:01:15.000
+specific container.
+
+00:01:16.300 --> 00:01:21.200
+C++ offers three main categories of containers. Sequence containers, associative
+
+00:01:21.200 --> 00:01:26.400
+containers, and unordered associative containers. We also have two groups of
+
+00:01:26.400 --> 00:01:30.900
+container-like objects: adaptors and views. Finally we have a group of classes that
+
+00:01:30.900 --> 00:01:36.100
+are not exactly containers but they kind of contain data. We will examine each group
+
+00:01:36.200 --> 00:01:40.800
+in more detail soon. Using a container is relatively straightforward, regardless
+
+00:01:40.800 --> 00:01:45.200
+of the container. So, first you need to include the appropriate header file, which
+
+00:01:45.200 --> 00:01:45.600
+has the same
+
+00:01:45.700 --> 00:01:51.200
+name as the container. #include vector for example allows us to use
+
+00:01:51.200 --> 00:01:56.700
+vectors. Then later in some other part of the code we declare a variable
+
+00:01:56.700 --> 00:02:02.600
+of type std double-colon vector. std is the standard library namespace, the
+
+00:02:02.600 --> 00:02:09.400
+scope within all these containers live. vector is just the name of the class.
+
+00:02:09.500 --> 00:02:13.500
+std::vector means the vector class from the standard library.
+
+00:02:14.500 --> 00:02:18.900
+All containers are templates, so we have to define the template parameters. In this
+
+00:02:18.900 --> 00:02:24.700
+case, we define data as a vector of ints. Similarly, we declare other containers,
+
+00:02:25.200 --> 00:02:32.100
+in this example, here, we have a list and a map. Okay,
+
+00:02:32.800 --> 00:02:37.400
+all of these containers are useful but I will only go through the
+
+00:02:37.400 --> 00:02:42.000
+most important ones from each container group. You will not need to use in the exam
+
+00:02:42.000 --> 00:02:44.100
+any containers I do not discuss.
+
+00:02:45.200 --> 00:02:50.200
+First, sequence containers store their elements in some short of well defined order
+
+00:02:50.600 --> 00:02:54.800
+We have vectors, lists, deques, etc. But the most important one is the
+
+00:02:54.800 --> 00:03:00.500
+vector. This is similar to the vector we defined earlier. It's a variable size array 
+
+00:03:00.800 --> 00:03:07.000
+class and it encapsulates a raw heap array and its size. Like we discussed earlier, 
+
+00:03:07.000 --> 00:03:12.400
+This is similar in functionality to Python lists and Java ArrayLists but far more
+
+00:03:12.400 --> 00:03:13.100
+efficient. A
+
+00:03:14.000 --> 00:03:17.900
+pseudo definition is on the right: the class contains a pointer to the heap
+
+00:03:17.900 --> 00:03:23.700
+array and the size of that array. Its most important vector-specific operations
+
+00:03:23.700 --> 00:03:28.700
+are these, you construct it as an empty vector, with a certain size, or with a list
+
+00:03:28.700 --> 00:03:34.400
+of elements. You push_back elements one by one to append them and you access specific
+
+00:03:34.400 --> 00:03:38.900
+indexes with square brackets, like you would access an array.
+
+00:03:39.700 --> 00:03:45.300
+You can also access indexes with bounds checking, making sure that the index is valid
+
+00:03:45.800 --> 00:03:51.100
+and you do that by using at. This is safer but a bit slower. So it depends on your
+
+00:03:51.100 --> 00:03:51.700
+trade off.
+
+00:03:52.900 --> 00:03:58.700
+The other important container is array. This is a fixed size array which encapsulates
+
+00:03:59.000 --> 00:04:03.600
+a raw stack array. The size of the array is a template parameter and it's known
+
+00:04:03.700 --> 00:04:07.500
+at compile time. Again a pseudo-definition is on the right.
+
+00:04:09.600 --> 00:04:14.900
+std::array has a similar interface to vector: you can initialise it with a specific
+
+00:04:14.900 --> 00:04:21.399
+space but otherwise empty, you can initialise it with a specific sequence, you can
+
+00:04:21.399 --> 00:04:25.500
+use square brackets and you can use at. The major difference, of course, is that you
+
+00:04:25.500 --> 00:04:30.300
+cannot append data, because the array is fixed size. There are more sequence containers
+
+00:04:30.400 --> 00:04:35.000
+but unless you *know* that you need something else, you should just
+
+00:04:35.000 --> 00:04:35.600
+use a vector.
+
+00:04:36.700 --> 00:04:40.900
+And as a matter of fact, you should use vectors even when you think you need a
+
+00:04:40.900 --> 00:04:46.600
+raw array. C-like arrays are somewhere between redundant and harmful in modern
+
+00:04:46.600 --> 00:04:52.300
+C++. Vectors have similar strengths as raw arrays: they provide contiguous storage
+
+00:04:52.600 --> 00:04:57.100
+the provide direct memory, random access and they have low storage overhead and
+
+00:04:57.100 --> 00:05:01.800
+low runtime overhead. So vectors can give us the same benefits as C-arrays.
+
+00:05:02.900 --> 00:05:08.500
+But vectors are safer and better. When using at, they eliminate bounds errors, one of the
+
+00:05:08.500 --> 00:05:14.400
+most common runtime errors in C. Then, vectors are resizable, they can grow automatically.
+
+00:05:15.000 --> 00:05:18.500
+They also provide a rich interface to the rest of the library, and of course
+
+00:05:18.500 --> 00:05:24.400
+they are RAII-compatible. This last bit is critical. When using raw heap
+
+00:05:24.400 --> 00:05:28.900
+arrays, all of the memory management is manual. We have to do a manual new and a
+
+00:05:28.900 --> 00:05:32.500
+manual delete. If we forget the delete, or some exception happens and
+
+00:05:32.700 --> 00:05:39.500
+we skip the delete, then we have a memory leak. This is bad. With vectors, memory management
+
+00:05:39.500 --> 00:05:45.300
+is automatic. We tell the vector what size we want when we create it and it allocates
+
+00:05:45.300 --> 00:05:49.800
+it. Then when the vector goes out of scope, the allocated memory is released
+
+00:05:49.800 --> 00:05:51.700
+We don't have to do anything about memory.
+
+00:05:52.900 --> 00:05:58.500
+Finally, C arrays have the bad habit of decaying into plain pointers when passed to functions.
+
+00:05:59.000 --> 00:06:03.600
+In the function fn1, the typing information alone is not enough to tell whether
+
+00:06:03.900 --> 00:06:08.700
+the argument is an array or a pointer. And if it's an array, we
+
+00:06:08.700 --> 00:06:13.300
+have no way to find its size, without extra information from
+
+00:06:13.300 --> 00:06:17.500
+somewhere else. But when we pass a vector to a function, it remains a vector
+
+00:06:17.800 --> 00:06:21.000
+and its size is still known. This is easier and safer.
+
+00:06:22.500 --> 00:06:26.300
+There are some corner cases though where a C-array might be slightly more efficient.
+
+00:06:27.000 --> 00:06:31.800
+vectors are dynamically allocated arrays so they carry the same overheads as raw heap arrays. But
+
+00:06:32.600 --> 00:06:38.000
+stack arrays, fixed size arrays, might be slightly faster and more efficient. For example,
+
+00:06:38.000 --> 00:06:42.800
+if we know at compiled time, the size of the array, that enables some compiler optimizations,
+
+00:06:42.800 --> 00:06:48.000
+that make the code faster. 95% of the time you don't really care though. And even if you
+
+00:06:48.000 --> 00:06:51.800
+really care, just use the std array which is
+
+00:06:52.000 --> 00:06:56.300
+also a fixed size stack array but does not suffer from the limitations of C-arrays.
+
+00:06:57.400 --> 00:07:02.600
+Let's move to the next two groups, the associative containers. These implement set and
+
+00:07:02.600 --> 00:07:06.700
+map operations, similarly to the set and dict types in python.
+
+00:07:07.700 --> 00:07:12.700
+The main set-specific operations for set are these: we can create an empty set
+
+00:07:12.700 --> 00:07:18.400
+or initialise it with some elements, we can insert or erase an element, we can find
+
+00:07:18.400 --> 00:07:22.900
+it in the set or count how many times it appears. maps have the same
+
+00:07:22.900 --> 00:07:28.000
+operations but also the square brackets and at operators, which return the
+
+00:07:28.000 --> 00:07:33.400
+value for the given key. These are really the same operators who had four vectors,
+value for the given key. These are really the same operators we had for vectors
+
+00:07:34.600 --> 00:07:36.800
+but instead of indexes, we give keys.
+
+00:07:37.900 --> 00:07:42.600
+Both ordered and unordered groups have similar containers with similar
+
+00:07:42.600 --> 00:07:46.700
+interfaces, what differs is the internal implementation.
+
+00:07:48.100 --> 00:07:52.200
+Ordered containers basically keep their data in some kind of order internally.
+
+00:07:52.700 --> 00:07:57.800
+Typically this is done with a search tree. To do that, the data need to be comparable,
+
+00:07:57.900 --> 00:08:03.600
+which means that their class needs to override the comparison operators. Unordered
+
+00:08:03.600 --> 00:08:08.000
+containers store their data in some hash map, so they don't need comparison operators
+
+00:08:08.500 --> 00:08:13.100
+but they do need the data to be hashable. They need the data type to implement a
+
+00:08:13.100 --> 00:08:14.400
+hash operation.
+
+00:08:15.500 --> 00:08:20.300
+For random access, unordered containers are usually faster but they do tend to use more
+
+00:08:20.300 --> 00:08:23.000
+memory, so which one to use depends on your problem.
+
+00:08:24.200 --> 00:08:29.400
+I will skip adaptors and move straight to Views and the span object. Span is similar
+
+00:08:29.400 --> 00:08:34.200
+to python slices. It's not a true container, it does not have any data of its own,
+
+00:08:34.900 --> 00:08:39.799
+but it encapsulates some memory region with container, tells us
+
+00:08:40.299 --> 00:08:46.600
+where the region begins and where it ends, we can use it like container but the
+
+00:08:46.600 --> 00:08:51.400
+data will be somewhere else in some other memory. The basic use for spans
+
+00:08:51.400 --> 00:08:53.200
+is to encapsulate C-arrays.
+
+00:08:54.000 --> 00:08:57.900
+If for some reason you still want to use C-arrays or more likely you interface with
+
+00:08:57.900 --> 00:09:03.400
+C code, you can encapsulate the array with a span and then use it safely.
+
+00:09:04.200 --> 00:09:09.000
+In this example, here we declare a stack array a with five elements and we
+
+00:09:09.000 --> 00:09:14.400
+convert it into a span s. We can then directly access any element of a through s
+
+00:09:14.900 --> 00:09:19.700
+but s does not decay into a pointer, carries its size with it, and we can do bounds
+
+00:09:19.800 --> 00:09:21.000
+checking on it.
+
+00:09:22.000 --> 00:09:26.300
+Finally we have two utility classes that hold data but are not really containers
+
+00:09:26.500 --> 00:09:31.800
+tuples and pairs. They're basically quick and dirty ways for creating ad hoc structs.
+
+00:09:32.500 --> 00:09:36.600
+I am not going to say more though. We will discuss their most important use case next
+
+00:09:36.600 --> 00:09:37.000
+week.
+
+00:09:38.500 --> 00:09:42.100
+The C++ containers offer a rich interface which allows us to use them efficiently.
+
+00:09:43.300 --> 00:09:47.100
+I will not go through all these functions, it would take us ages. And of course you
+
+00:09:47.100 --> 00:09:50.900
+don't need to remember any of this. Just check the reference manual whenever you
+
+00:09:50.900 --> 00:09:55.400
+need to use a container. The thing that you need to remember is that some of
+
+00:09:55.400 --> 00:10:02.000
+these functions are common across all or almost all containers. This is the common
+
+00:10:02.000 --> 00:10:07.600
+interface of the C++ containers. It's functions retrieving the overall state of
+
+00:10:07.600 --> 00:10:07.600
+the
+
+00:10:07.900 --> 00:10:14.000
+container: empty(), size(), max_size(). It's functions adding items: insert and emplace.
+
+00:10:14.500 --> 00:10:19.000
+It's the erase function which removes a specific item. It's clear which deletes
+
+00:10:19.000 --> 00:10:25.600
+all data. But most importantly, it's the begin and end functions. These
+
+00:10:25.600 --> 00:10:30.700
+functions allow us to get the beginning and the end of the container, whatever
+
+00:10:30.700 --> 00:10:32.000
+that means for each container.
+
+00:10:32.800 --> 00:10:37.600
+With that information we can then build generic algorithms that can access all
+
+00:10:37.600 --> 00:10:41.900
+items in the container sequentially, from the beginning of the container to the
+
+00:10:41.900 --> 00:10:49.600
+end. We will discuss this bit in the next video. To recap, containers are template
+
+00:10:49.600 --> 00:10:54.500
+classes that encapsulate data organised in some kind of data structure. There
+
+00:10:54.500 --> 00:10:58.700
+are many different containers but you will only need to use a few of them. Almost
+
+00:10:58.700 --> 00:11:00.500
+always what you want is a vector.
+
+00:11:01.400 --> 00:11:05.600
+Vectors make C heap arrays redundant. You get the same performance with cleaner
+
+00:11:05.600 --> 00:11:10.600
+interfaces and better safety. If you think you need a stack array, you actually want
+
+00:11:10.600 --> 00:11:15.400
+to use an std::array. If you need a dictionary, you use the map or the unordered map
+
+00:11:15.400 --> 00:11:18.900
+If you need a set, you use a set or an unordered set.
+
+00:11:19.900 --> 00:11:24.400
+Spans are not exactly containers but they encapsulate existing memory, for example
+
+00:11:24.400 --> 00:11:31.600
+C arrays, with container semantics, so you can use them in the library. While its
+
+00:11:31.600 --> 00:11:36.100
+container has its own interface, they all share a subset of functions that allows
+
+00:11:36.100 --> 00:11:41.700
+us to use them through generic code. In the next part, we will discuss an important
+
+00:11:41.700 --> 00:11:47.100
+part of that interface, the handles to the beginning and end of
+
+00:11:47.100 --> 00:11:49.600
+called iterators, and how exactly
+
+00:11:49.700 --> 00:11:54.000
+they allow us to use containers generically.
+

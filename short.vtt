@@ -1,0 +1,19 @@
+WEBVTT
+
+00:02:37.400 --> 00:02:42.000
+most important ones from each container group. You will not need to use in the exam
+
+00:02:42.000 --> 00:02:44.100
+any containers I do not discuss.
+
+00:02:45.200 --> 00:02:50.200
+First, sequence containers store their elements in some short of well defined order
+
+00:02:50.600 --> 00:02:54.800
+We have vectors, lists, deques, etc. But the most important one is the
+
+00:02:54.800 --> 00:03:00.500
+vector. This is similar to the vector we defined earlier. It's a variable size array 
+
+00:03:00.800 --> 00:03:07.000
+class and it encapsulates a raw heap array and its size. Like we discussed earlier, 
