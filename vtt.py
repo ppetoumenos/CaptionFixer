@@ -94,11 +94,6 @@ class VTT:
                 crosses_start = i1 < start
                 crosses_end = i2 > end
 
-                print(start, end, opcode, i1, i2, j1, j2)
-                print(line)
-                print(' '.join(captions[i1:i2]))
-                print(' '.join(script[j1:j2]))
-
                 if opcode in ['equal', 'replace']:
                     if crosses_start:
                         j1 += start - i1
@@ -122,7 +117,6 @@ class VTT:
                 opcode_idx += 1
 
             fixed_line = ' '.join(fixed_line)
-            print(fixed_line)
             # if the match is imperfect, add both the original and the new line
             if difflib.SequenceMatcher(None, line, fixed_line).ratio() < _THR:
                 line = f'---{line}\n+++{fixed_line}'
